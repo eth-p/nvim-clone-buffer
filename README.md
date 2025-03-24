@@ -36,6 +36,12 @@ Creates a copy of the current buffer and leaves it in the background.
 > Default: `true`
 
 >[!tip]
+> **suppress_autocmd**: If set to `true`, autocmds will not run while creating the cloned buffer.
+>
+> Type: `boolean`  
+> Default: `true`
+
+>[!tip]
 > **cloned_options**: The buffer-local options that will be cloned.
 > If an option is set to false, it will be skipped.
 >

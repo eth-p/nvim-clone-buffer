@@ -2,6 +2,7 @@ local M = {}
 
 local settings = {
 	enabled = true,
+	suppress_autocmd = true,
 
 	cloned_options = {
 		filetype = true,
@@ -47,11 +48,16 @@ end
 -- API:
 function M.create_clone(buf_num)
 	local autocmd_state = vim.g.autocmd_enabled
-	vim.g.autocmd_enabled = false
+	if settings.suppress_autocmd then
+		vim.g.autocmd_enabled = false
+	end
 
 	local new_buf = do_create_clone(buf_num)
 
-	vim.g.autocmd_enabled = autocmd_state
+	if settings.suppress_autocmd then
+		vim.g.autocmd_enabled = autocmd_state
+	end
+
 	return new_buf
 end
 
