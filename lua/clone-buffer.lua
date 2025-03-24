@@ -40,6 +40,9 @@ local function do_create_clone(from_buf)
 	do_copy_options(vim.bo[from_buf], vim.bo[to_buf], settings.cloned_options)
 	do_copy_options(vim.b[from_buf], vim.b[to_buf], settings.cloned_vars)
 
+	-- Mark the buffer as unmodified.
+	vim.bo[to_buf].modified = false
+
 	-- Allow the buffer to be listed.
 	vim.bo[to_buf].buflisted = true
 	return to_buf
