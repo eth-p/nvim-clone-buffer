@@ -50,6 +50,12 @@ end
 
 -- API:
 function M.create_clone(buf_num)
+	local src_buftype = vim.bo[buf_num].buftype
+	if src_buftype ~= "" then
+		return nil, ("cannot clone %s buffer"):format(src_buftype)
+	end
+
+	-- Create the buffer
 	local autocmd_state = vim.g.autocmd_enabled
 	if settings.suppress_autocmd then
 		vim.g.autocmd_enabled = false
@@ -61,19 +67,29 @@ function M.create_clone(buf_num)
 		vim.g.autocmd_enabled = autocmd_state
 	end
 
-	return new_buf
+	return new_buf, nil
 end
 
 -- Commands:
 M.commands = {}
 function M.commands.CloneBufferInBackground()
 	local buf_num = vim.api.nvim_win_get_buf(0) -- current window
-	M.create_clone(buf_num)
+	local _, err = M.create_clone(buf_num)
+	if err ~= nil then
+		local errmsg = ("%s: %s"):format("CloneBufferInBackground", err)
+		vim.api.nvim_echo({ { errmsg, "ErrorMsg" } }, true, {})
+	end
 end
 
 function M.commands.CloneBuffer()
 	local buf_num = vim.api.nvim_win_get_buf(0) -- current window
-	local new_buf = M.create_clone(buf_num)
+	local new_buf, err = M.create_clone(buf_num)
+	if err ~= nil then
+		local errmsg = ("%s: %s"):format("CloneBufferInBackground", err)
+		vim.api.nvim_echo({ { errmsg, "ErrorMsg" } }, true, {})
+		return
+	end
+
 	vim.api.nvim_win_set_buf(0, new_buf)
 end
 
