@@ -1,0 +1,10 @@
+# Selene Standard Library format for minimal neovim.
+# https://kampfkarren.github.io/selene/usage/std.html
+base: lua51
+lua_versions:
+ - lua51
+ - luajit
+
+globals:
+  vim:
+    any: true
